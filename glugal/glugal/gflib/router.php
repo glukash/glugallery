@@ -26,10 +26,6 @@ if ($gAjaxCall)
     {
         $gQuery = $_GET['url'];
     }
-    //elseif ( isne( $_SERVER['QUERY_STRING'] ) )
-    //{
-    //    $gQuery = $_SERVER['QUERY_STRING'];
-    //}
     else
     {
         $gQuery = '';
@@ -37,7 +33,6 @@ if ($gAjaxCall)
 }
 else
 {
-    //$gQuery = $_SERVER['QUERY_STRING'];
     if ( isne( $_GET['url'] ) )
     {
         $gQuery = $_GET['url'];
@@ -50,11 +45,10 @@ else
 
     $gAppDir = gRouter( $gRouter, $gParams, $gParamsNamed, $gQuery );
     $gAppUrl = $gRootUrl.$gAppDir.'/';
-    //if ( is_file( $gRouter['dir']."/config/config.php" ) )
-    if ( is_file( GAPPPATH."config/config.php" ) )
+
+    if ( is_file( G_APP_PATH."config/config.php" ) )
     {
-        //include $gRouter['dir']."/config/config.php";
-        include GAPPPATH."config/config.php";
+        include G_APP_PATH."config/config.php";
     }
 
     if ( !isset( $gAuth ) || ( $gAuth == false ) )
@@ -89,19 +83,19 @@ else
 
         if ( $gAuthorize == false )
         {
-            if ( isset( $gAuthPerms[GAPP]['roles'] ) ) //authorize controller
+            if ( isset( $gAuthPerms[G_APP_NAME]['roles'] ) ) //authorize controller
             {
-                $gAuthorize = gAuthorize( $gUser, $gAuthPerms[GAPP]['roles'] );
+                $gAuthorize = gAuthorize( $gUser, $gAuthPerms[G_APP_NAME]['roles'] );
             }
 
-            if ( isset( $gAuthPerms[GAPP][$gRouter['act']]['roles'] ) ) //authorize action
+            if ( isset( $gAuthPerms[G_APP_NAME][$gRouter['act']]['roles'] ) ) //authorize action
             {
-                $gAuthorize = gAuthorize( $gUser, $gAuthPerms[GAPP][$gRouter['act']]['roles'] );
+                $gAuthorize = gAuthorize( $gUser, $gAuthPerms[G_APP_NAME][$gRouter['act']]['roles'] );
             }
 
-            if ( isset($gParams[0]) && isset( $gAuthPerms[GAPP][$gRouter['act']][$gParams[0]]['roles'] ) ) //authorize firt param
+            if ( isset($gParams[0]) && isset( $gAuthPerms[G_APP_NAME][$gRouter['act']][$gParams[0]]['roles'] ) ) //authorize firt param
             {
-                $gAuthorize = gAuthorize( $gUser, $gAuthPerms[GAPP][$gRouter['act']][$gParams[0]]['roles'] );
+                $gAuthorize = gAuthorize( $gUser, $gAuthPerms[G_APP_NAME][$gRouter['act']][$gParams[0]]['roles'] );
             }
         }
 
@@ -112,18 +106,16 @@ else
         }
     }
 
-    //if ( is_file( $gRouter['dir']."/ac/".$gRouter['act'].'.php' ) )
-    if ( is_file( GAPPPATH."ac/".$gRouter['act'].'.php' ) )
+    if ( is_file( G_APP_PATH."ac/".$gRouter['act'].'.php' ) )
     {
-        //include $gRouter['dir']."/ac/".$gRouter['act'].'.php';
-        include GAPPPATH."ac/".$gRouter['act'].'.php';
+        include G_APP_PATH."ac/".$gRouter['act'].'.php';
     }
     else
     {
-        gLog('router.log','Action doesn\'t exists: '.GAPP.'/'.$gRouter['act']);
         //set_msg('The page doesn\'t exists!','','error',10,'bottom','half');
         //gRedirect('/'.$gRouter['con']);
-        die('Action doesn\'t exists: '.GAPP.'/'.$gRouter['act']);
+        gLog('router.log','Action doesn\'t exists: '.G_APP_DIR.'/'.$gRouter['act']);
+        die('Action doesn\'t exists: '.G_APP_DIR.'/'.$gRouter['act']);
     }
 
 if ($gAjaxCall)
@@ -133,10 +125,8 @@ if ($gAjaxCall)
         $gView = $gRouter['act'];
     }
 
-    //if ( is_file( $gRouter['dir']."/av/".$gView.'.php' ) )
-    if ( is_file( GAPPPATH."av/".$gView.'.php' ) )
+    if ( is_file( G_APP_PATH."av/".$gView.'.php' ) )
     {
-        //include $gRouter['dir']."/av/".$gView.'.php';
-        include GAPPPATH."av/".$gView.'.php';
+        include G_APP_PATH."av/".$gView.'.php';
     }
 }

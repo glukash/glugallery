@@ -6,11 +6,13 @@
 $galRoot = $_SERVER['DOCUMENT_ROOT'].'/files/gallery/';
 $galRootUrl =  'http://'.$_SERVER['HTTP_HOST'].'/files/gallery/';
 
+if ( defined('G_APP_PATH') ):
 $gAuth = true;
 $gAuthSecurity='X122GfyoP';
-$gAuthUsersFile = $gRoot.'/glugal/config/users.auth';
-$gAuthPermsFile = $gRoot.'/glugal/config/perms.auth';
-$gAuthLoginUrl = '/index';
+$gAuthUsersFile = G_APP_PATH.'config/users.auth';
+$gAuthPermsFile = G_APP_PATH.'config/perms.auth';
+$gAuthLoginUrl = $gRootUrl.'index';
+endif;
 //$gAuthRoles = 'admin manager';
 //$gAuthPerms = array(
 //    'glugal'=>array(

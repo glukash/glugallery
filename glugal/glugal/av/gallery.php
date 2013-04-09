@@ -31,7 +31,7 @@
                 <a id="gal-upload" class="cb-upload cboxElement button" href="<?php echo $gRootUrl.'glugal/vendor/up/index.php?td='.$galName; ?>">upload</a>
             </div>
             <div class="float-left">
-                <label for="gal-title" class="display-block">Title</label>
+                <label id="gal-title-label" for="gal-title" class="display-block">Title</label>
                 <input id="gal-title" class="display-block" type="text" name="data[glugal][info][title]" value="<?php echo isset($admin_gallery['info']['title'])?$admin_gallery['info']['title']:''; ?>" />
             </div>
             <div class="float-left">
@@ -39,7 +39,7 @@
                 <input id="gal-date" class="display-block" type="text" name="data[glugal][info][date]" value="<?php echo isset($admin_gallery['info']['date'])?$admin_gallery['info']['date']:''; ?>" />
             </div>
             <div class="float-left">
-                <label for="gal-desc" class="display-block">Description</label>
+                <label id="gal-desc-label" for="gal-desc" class="display-block">Description</label>
                 <input id="gal-desc" class="display-block" type="text" name="data[glugal][info][description]" value="<?php echo isset($admin_gallery['info']['description'])?$admin_gallery['info']['description']:''; ?>" />
             </div>
             <div class="float-left" style="padding-top:18px;">
@@ -122,7 +122,7 @@
                 <?php echo sprintf("%03d",$k+1); ?>
             </td>
             <td class="img-<?php echo $k+1; ?> filename-wrapper font10">
-                <?php echo $img['file']; ?>
+                <span class="img-filename-label"><?php echo $img['file']; ?></span>
                 <input class="img-filename" type="hidden" name="data[glugal][items][<?php echo $k; ?>][file]" value="<?php echo $img['file']; ?>" />
             </td>
             <td class="img-<?php echo $k+1; ?> title-descr-wrapper">
@@ -205,6 +205,18 @@
                     Current gallery url: <span class="color-dist font-bold"><?php echo $galRootUrl; ?><?php echo $galName; ?></span>
                 </li>
             </ul>
+        </div>
+        <div id="gal-desc-popup" style="width:620px; padding:20px; background-color: #fff;">
+            <h1>Edit gallery description</h1>
+            <div class="pad-hor-20 align-justify" style="">
+                <textarea id="gal-desc-area" cols="74" rows="28" style="width:600px; height: 300px;"></textarea>
+            </div>
+        </div>
+        <div id="gal-title-popup" style="width:620px; padding:20px; background-color: #fff;">
+            <h1>Edit gallery title</h1>
+            <div class="pad-hor-20 align-justify" style="">
+                <textarea id="gal-title-area" cols="74" rows="3" style="width:600px; height: 50px;"></textarea>
+            </div>
         </div>
     </div>
 </div>
@@ -488,6 +500,90 @@ $(document).ready(function(){
                 gal_edited();
             }
         }
+    });
+
+    //dbl click to change name
+    $('.admin-gallery-items.tbody').on('dblclick','.img-filename-label',function(){
+        var $self = $(this);
+        var $parent_td = $self.parents('td');
+        var $filename_input = $parent_td.find('.img-filename');
+        $filename_input.attr('type','text');
+        $self.hide();
+        $parent_td.append('<a href="#" class="img-filename-ok">OK</a>');
+    });
+
+    //change name confirm
+    $('.admin-gallery-items.tbody').on('click','.img-filename-ok',function(event){
+        event.preventDefault();
+        var $self = $(this);
+        var $parent_td = $self.parents('td');
+        var $parent_td_class = $parent_td.attr('class');
+        var $index_of_space = $parent_td_class.indexOf(' ');
+
+        var $img_id;
+        if ( $index_of_space != -1 )
+        {
+            $img_id = $parent_td_class.substring(0,$index_of_space);
+        }
+        else
+        {
+            $img_id = $parent_td_class;
+        }
+
+        var $filename_label = $parent_td.find('.img-filename-label');
+        var $filename_input = $parent_td.find('.img-filename');
+        var $cur_filename = $parent_td.find('.img-filename-label').html();
+        var $new_filename = $filename_input.val();
+
+        $filename_input.attr('type','hidden');
+        $filename_label.show();
+        $self.remove();
+        document.getSelection().removeAllRanges();
+
+        if ( $new_filename != $cur_filename )
+        {
+            rename_file( $img_id, $cur_filename, $new_filename );
+        }
+    });
+
+    $('#gal-date').datepicker({
+        //showOn: "button",
+        //buttonImage: "images/calendar.gif",
+        //buttonText: ".",
+        //buttonImageOnly: false,
+        dateFormat: "yy-mm-dd"
+        //timeFormat: "HH:mm"
+    });
+
+    $('#gal-desc-label').on('dblclick',function(){
+        $.colorbox({
+            href:'#gal-desc-popup',
+            inline:true,
+            onLoad:function(){
+                var $input = $('#gal-desc').val();
+                $('#gal-desc-area').val( $input );
+            },
+            onCleanup:function(){
+                var $area = $('#gal-desc-area').val();
+                $('#gal-desc').val( $area );
+            }
+        });
+    });
+
+
+    $('#gal-title-label').on('dblclick',function(){
+        $.colorbox({
+            href:'#gal-title-popup',
+            inline:true,
+            onLoad:function(){
+                var $input = $('#gal-title').val();
+                $('#gal-title-area').val( $input );
+            },
+            onCleanup:function(){
+                var $area = $('#gal-title-area').val();
+                $('#gal-title').val( $area );
+            }
+        });
     });
 
     //switch to sort view

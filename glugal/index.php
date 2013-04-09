@@ -6,31 +6,36 @@ session_name('gluf');
 session_start();
 ?>
 <?php
-    define( 'GROOT', realpath(dirname(__FILE__)).'/');
-    define( 'GAPP', 'glugal' );
-    define( 'GAPPPATH', GROOT.GAPP.'/' );
-    define( 'GDIR', 'gluf' );
-    define( 'GDIRPATH', GAPPPATH.GDIR.'/' );
-    define( 'GLIBPATH', GDIRPATH.'lib/' );
+    define( 'G_ROOT', realpath(dirname(__FILE__)).'/');
+    define( 'G_APP_NAME', 'glugal' );
+    define( 'G_APP_DIR', 'glugal' );
+    define( 'G_APP_PATH', G_ROOT.G_APP_DIR.'/' );
+    define( 'G_LIB_DIR', 'gflib' );
+    define( 'G_LIB_PATH', G_APP_PATH.G_LIB_DIR.'/' );
 ?>
-<?php require_once GLIBPATH.'lib.php'; ?>
-<?php require_once GLIBPATH.'config.php'; ?>
-<?php require_once GLIBPATH.'bootstrap.php'; ?>
-<?php require_once GLIBPATH.'router.php'; ?>
+<?php require_once G_LIB_PATH.'lib.php'; ?>
+<?php require_once G_LIB_PATH.'config.php'; ?>
+<?php require_once G_LIB_PATH.'bootstrap.php'; ?>
+<?php require_once G_LIB_PATH.'router.php'; ?>
 <?php
 ?>
 <?php if  (isae($_POST['request'],'ajax')) exit; ?>
 <?php
 
-    if ( is_file( GAPPPATH.'layout/'.$gLayout.'.php' ) )
+    if ( is_file( G_APP_PATH.'layout/'.$gLayout.'.php' ) )
     {
-        include_once GAPPPATH.'layout/'.$gLayout.'.php';
+        include_once G_APP_PATH.'layout/'.$gLayout.'.php';
     }
-    elseif ( is_file( GAPPPATH.'layout/'.GAPP.'.php' ) )
+    elseif ( is_file( G_APP_PATH.'layout/'.G_APP_NAME.'.php' ) )
     {
-        include_once GAPPPATH.'layout/'.GAPP.'.php';
+        include_once G_APP_PATH.'layout/'.G_APP_NAME.'.php';
     }
     else
     {
-        die( 'SITE ERROR: No layout file: '.GAPPPATH.'layout/'.$gLayout.'.php' );
+        die( 'SITE ERROR: No layout file: '.G_APP_PATH.'layout/'.$gLayout.'.php' );
+    }
+
+    if ( isset($_GET['debug']))
+    {
+        include G_LIB_PATH.'debug.php';
     }

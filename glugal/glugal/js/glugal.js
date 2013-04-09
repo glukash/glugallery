@@ -43,18 +43,8 @@
             );
 
         $('.admin-gallery-items .id-wrapper, .admin-gallery-items td.src-wrapper a,.admin-gallery-items td.out-wrapper a, .admin-gallery-items td.min-wrapper a').css({'cursor':'move'});
-        $('.cb-'+$type+'').colorbox({
-            rel:'cb-'+$type+'',
-            transition:"elastic",
-            opacity:".6",
-            maxWidth: '90%',
-            maxHeight: '90%',
-            overlayClose:false,
-            current: "{current} / {total}",
-            slideshowStart:"pokaz: włącz",
-            slideshowStop:"pokaz: wyłącz",
-            slideshowSpeed:"3000"
-        });
+
+        set_colorbox();
         return true;
     }
 
@@ -80,6 +70,105 @@
             html('');
 
         return true;
+    }
+
+    function rename_file( $img_id, $cur_filename, $new_filename )
+    {
+        $.ajax({
+            type: 'POST',
+            url: gRootUrl+'rename',
+            data:
+            {
+                'data[rename][gallery]':g_name,
+                'data[rename][cur_filename]':$cur_filename,
+                'data[rename][new_filename]':$new_filename
+            },
+            success:
+            function(data){
+                var $replace;
+                if ( data.status == 'success' )
+                {
+                    //propagate new filename
+
+                    //filename-wrapper
+                    $('.admin-gallery-items.tbody td.'+$img_id+' .img-filename-label').html($new_filename);
+                    $('.admin-gallery-items.tbody td.'+$img_id+' .img-filename').val($new_filename);
+
+                    //active-wrapper
+                    $('.admin-gallery-items.tbody td.'+$img_id+' .thumb-picker').val($new_filename);
+
+                    //src-wrapper
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.src-wrapper a').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.src-wrapper a').attr('href');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.src-wrapper a').attr('href',$replace);
+                    }
+
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.src-wrapper a img.src-img').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.src-wrapper a img.src-img').attr('src');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.src-wrapper a img.src-img').attr('src',$replace);
+                    }
+
+                    //sout-wrapper
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.out a').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.out a').attr('href');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.out a').attr('href',$replace);
+                    }
+
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.out-wrapper a').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.out-wrapper a').attr('href');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.out-wrapper a').attr('href',$replace);
+                    }
+
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.out-wrapper a img.out-img').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.out-wrapper a img.out-img').attr('src');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.out-wrapper a img.out-img').attr('src',$replace);
+                    }
+
+                    //min-wrapper
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.min a').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.min a').attr('href');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.min a').attr('href',$replace);
+                    }
+
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.min-wrapper a').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.min-wrapper a').attr('href');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.min-wrapper a').attr('href',$replace);
+                    }
+
+                    if ( $('.admin-gallery-items.tbody td.'+$img_id+'.min-wrapper a img.min-img').length >0 )
+                    {
+                        $replace = $('.admin-gallery-items.tbody td.'+$img_id+'.min-wrapper a img.min-img').attr('src');
+                        $replace = $replace.replace($cur_filename,$new_filename);
+                        $('.admin-gallery-items.tbody td.'+$img_id+'.min-wrapper a img.min-img').attr('src',$replace);
+                    }
+
+                    $.msg(data.info,'Save gallery to index new filenames!','success',5,'bottom');
+
+                    set_colorbox();
+                }
+                else if ( data.status == 'error' )
+                {
+                    $('.admin-gallery-items.tbody td.'+$img_id+' .img-filename').val($cur_filename);
+                    $.msg(data.info,'','error',0);
+                }
+            },
+            dataType: 'json',
+            async:ajax_async
+        });
     }
 
     function create_img ( create_link )

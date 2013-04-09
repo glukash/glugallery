@@ -3,7 +3,7 @@
 $gScriptDirName = dirname($_SERVER['SCRIPT_NAME']);
 
 $gRoot = $_SERVER['DOCUMENT_ROOT'];
-if ( $gScriptDirName == '/' )
+if ( $gScriptDirName == DIRECTORY_SEPARATOR )
 {
     $gRoot = $gRoot.'/';
 }
@@ -14,7 +14,7 @@ else
 
 
 $gRootUrl = selfURL(true);
-if ( $gScriptDirName == '/' )
+if ( $gScriptDirName == DIRECTORY_SEPARATOR )
 {
     $gRootUrl=$gRootUrl.'/';
 }
@@ -24,5 +24,11 @@ else
 }
 
 
-$gDefLayout = 'default';
-$gLayout = $gDefLayout;
+$gTmpPath = G_APP_PATH.'tmp/';
+
+if ( !is_dir( $gTmpPath ) )
+{
+    mkdir( $gTmpPath );
+}
+
+$qHead=array();

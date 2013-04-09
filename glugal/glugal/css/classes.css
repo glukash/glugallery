@@ -89,6 +89,7 @@
 .mar-hor-45 { margin-top: 45px !important; margin-bottom: 45px !important; }
 .mar-hor-50 { margin-top: 50px !important; margin-bottom: 50px !important; }
 
+.mar-ver-auto { margin-left:  auto   !important; margin-right:  auto   !important; }
 .mar-ver-00 { margin-left:  0   !important; margin-right:  0   !important; }
 .mar-ver-05 { margin-left:  5px !important; margin-right:  5px !important; }
 .mar-ver-10 { margin-left: 10px !important; margin-right: 10px !important; }

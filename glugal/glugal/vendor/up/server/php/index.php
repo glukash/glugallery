@@ -14,9 +14,9 @@ error_reporting(E_ALL | E_STRICT);
 
 
 
-require_once '../../../../gluf/lib/lib.php';
+//require_once '../../../../gflib/lib.php';
 //require_once '../../../../gluf/lib/bootstrap.php';
-require_once '../../../../gluf/lib/config.php';
+//require_once '../../../../gluf/lib/config.php';
 require_once '../../../../config/config.php';
 
 $galTargetDirectory = $_GET['td'];

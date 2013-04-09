@@ -41,3 +41,7 @@ $admin_gallery=array();
 $admin_gallery = $gGalleryAdmin->get_gallery($galName, true, true, true);
 
 $qHead['js'][] ='glugal/js/jquery.mousewheel.min.js';
+
+//$qHead['css'][] = 'glugal/js/jquery.timepicker/jquery-ui-timepicker-addon.css';
+//$qHead['js'][] =  'glugal/js/jquery.timepicker/jquery-ui-timepicker-addon.js';
+

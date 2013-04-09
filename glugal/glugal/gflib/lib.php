@@ -231,15 +231,19 @@ function gLog($logFile,$logMsg)
 
 	$logFile = $gTmpPath.$logFile;
 
-	$fp = fopen( $logFile,'a+' );
+	$bufor = file_get_contents($logFile);
+
+	$fp = fopen( $logFile,'w' );
 	flock($fp,LOCK_EX);
 	$line='';
 	$line.= "\n";
-	$line.= date("Y-m-d H:i:s")."\n";
-	$line.= $_SERVER['REQUEST_URI']."\n";
+	$line.= 'DATE: '.date("Y-m-d H:i:s")."\n";
+	$line.= 'IP  : '.$_SERVER['REMOTE_ADDR']."\n";
+	$line.= 'URI : '.$_SERVER['REQUEST_URI']."\n";
 	$line.= $logMsg."\n";
 	$line.= "\n";
 	$line.= "=======================================================================\n";
+	$line.= $bufor;
 	fwrite($fp, $line );
 	flock($fp,LOCK_UN);
 	fclose($fp);
@@ -432,41 +436,24 @@ function gAuthorize($user,$roles)
  */
 function gRouter( &$gRouter, &$gParams, &$gParamsNamed, $gQuery, $gDelim='/' )
 {
-    //global $gDefSite;
-
 	$gRouter['uri']=$_SERVER['REQUEST_URI'];
 
 	if ( $gQuery == '' || $gQuery == false || $gQuery == null )
 	{
-        //$gRouter['con']=$gDefSite;
-        //$gRouter['dir']=GPFX.$gRouter['con'];
         $gRouter['act']='index';
-		return GAPP; //$gRouter['dir'];
+		return G_APP_DIR;
 	}
 
 	$args=explode( $gDelim, $gQuery );
 
     if ( isne( $args[0] ) )
     {
-        //$gRouter['con']=trim( $args[0] );
         $gRouter['act']=trim( $args[0] );
     }
     else
     {
-        //$gRouter['con']=$gDefSite;
 		$gRouter['act']='index';
     }
-
-	//$gRouter['dir']=GPFX.$gRouter['con'];
-
-    //if ( isne( $args[1] ) )
-    //{
-    //    $gRouter['act']=trim( $args[1] );
-    //}
-    //else
-    //{
-    //    $gRouter['act']='index';
-    //}
 
     foreach( $args as $k=>$v )
     {
@@ -485,7 +472,7 @@ function gRouter( &$gRouter, &$gParams, &$gParamsNamed, $gQuery, $gDelim='/' )
         }
     }
 
-	return GAPP;//$gRouter['dir'];
+	return G_APP_DIR;
 }
 
 /**
@@ -543,13 +530,11 @@ function view()
 	global $gView;
 	if ( isne( $gView ) )
 	{
-		//return $gRouter['dir']."/av/".$gView.'.php';
-		return GAPPPATH."av/".$gView.'.php';
+		return G_APP_PATH."av/".$gView.'.php';
 	}
 	else
 	{
-		//return $gRouter['dir']."/av/".$gRouter['act'].'.php';
-		return GAPPPATH."av/".$gRouter['act'].'.php';
+		return G_APP_PATH."av/".$gRouter['act'].'.php';
 	}
 }
 
@@ -563,13 +548,11 @@ function element($element,$global=false)
 {
 	global $gRouter;
 
-	//$el_src = $gRouter['dir'].'/element/';
-	$el_src = GAPPPATH.'element/';
+	$el_src = G_APP_PATH.'element/';
 
 	if ( $global )
 	{
-		//$el_src = GPFX.'/element/';
-		$el_src = GDIRPATH.'element/';
+		$el_src = G_LIB_PATH.'element/';
 	}
 
 	if ( is_file( $el_src.$element.'.php' ) )

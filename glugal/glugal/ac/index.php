@@ -8,6 +8,22 @@ if ( isset( $gParams[0] ) )
         set_msg('Logout successful!','','success',10,'bottom');
         gRedirect('/index');
     }
+
+    if ( $gParams[0] == 'login' )
+    {
+        $_SESSION['gUser'] = gLogin( $gParams[1], $gParams[2], $gAuthUsersFile, $gAuthSecurity );
+
+        if ( $_SESSION['gUser'] == false )
+        {
+            set_msg('Wrong username or password!','','error',10,'bottom');
+            gRedirect('/index');
+        }
+        else
+        {
+            set_msg('Login successful!','','success',10,'bottom');
+            gRedirect('/index');
+        }
+    }
 }
 
 if ( !empty( $pdata ) )

@@ -5,9 +5,9 @@ $.cookie.path = '/';
 
 function set_loader( $message )
 {
-    if ( $('#loader-wrapper').length )
+    if ( $('#main-loader').length )
     {
-        $('#loader-wrapper #loader-message').html( $message );
+        $('#main-loader #loader-message').html( $message );
     }
 }
 

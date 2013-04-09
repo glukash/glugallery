@@ -2,7 +2,7 @@ AddDefaultCharset Off
 DirectoryIndex index.php
 Options -Indexes
 
-AddHandler x-httpd-php52 .php
+#AddHandler x-httpd-php52 .php
 
 <Files  ~ "\.auth$">
   Order allow,deny
@@ -12,6 +12,11 @@ AddHandler x-httpd-php52 .php
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /glugal/
+    #
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)\.(html|htm|php)$ index.php?url=$1 [QSA,L]
+    #
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
