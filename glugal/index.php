@@ -2,7 +2,7 @@
 ini_set('display_errors', '1');
 ini_set('error_reporting', E_ALL);
 mb_internal_encoding("UTF-8");
-session_name('gluf');
+session_name('glugal');
 session_start();
 ?>
 <?php

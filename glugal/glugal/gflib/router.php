@@ -112,10 +112,11 @@ else
     }
     else
     {
-        //set_msg('The page doesn\'t exists!','','error',10,'bottom','half');
-        //gRedirect('/'.$gRouter['con']);
         gLog('router.log','Action doesn\'t exists: '.G_APP_DIR.'/'.$gRouter['act']);
-        die('Action doesn\'t exists: '.G_APP_DIR.'/'.$gRouter['act']);
+        header("HTTP/1.0 404 Not Found");
+        echo('<br />ERROR: 404');
+        echo('<br /><br />Action doesn\'t exists: '.G_APP_DIR.'/'.$gRouter['act']);
+        exit('<br /><br />Go to main page: <a href="'.$gRootUrl.'">'.$gRootUrl.'</a>');
     }
 
 if ($gAjaxCall)
